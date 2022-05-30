@@ -298,6 +298,18 @@ public class PluginManageServiceApiController implements PluginManageServiceApi 
         }
     }
 
+    private static String removeSelfQuoteStr(String str) {
+        String finalStr = str.trim();
+        if (str.startsWith("\"") && str.endsWith("\"")) {
+            finalStr = finalStr.substring(1, finalStr.length() - 1);
+        } else if (finalStr.startsWith("[") && finalStr.endsWith("]")) {
+            finalStr = finalStr.substring(1, finalStr.length() - 1);
+        } else if (finalStr.startsWith("`") && finalStr.endsWith("`")) {
+            finalStr = finalStr.substring(1, finalStr.length() - 1);
+        }
+        return finalStr;
+    }
+
     @Override
     public Result getCreateTableDDL(String userId, CreateTableVO createTableVO) {
         DataSourceWrap dataSourceWrap = pluginRunDataSourceRepository.getDataSource(userId, createTableVO.getDataSourceId());
@@ -308,77 +320,71 @@ public class PluginManageServiceApiController implements PluginManageServiceApi 
             RowMetaInterface rowMetaInterface = new RowMeta();
             for (FieldsInfoVO fieldsInfoVO : fieldsInfoVOS) {
                 ValueMetaInterface valueMetaInterface;
+                String name = removeSelfQuoteStr(fieldsInfoVO.getName());
                 switch (ValueMetaInterface.getTypeCode(fieldsInfoVO.getType())) {
                     case ValueMetaInterface.TYPE_NONE:
                         valueMetaInterface = new ValueMetaNone();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_NUMBER:
                         valueMetaInterface = new ValueMetaNumber();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision() < 0 ? 0 : fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_STRING:
                         valueMetaInterface = new ValueMetaString();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_DATE:
                         valueMetaInterface = new ValueMetaDate();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_BOOLEAN:
                         valueMetaInterface = new ValueMetaBoolean();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
-
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_INTEGER:
                         valueMetaInterface = new ValueMetaInteger();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
-
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_BIGNUMBER:
                         valueMetaInterface = new ValueMetaBigNumber();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
-
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision() < 0 ? 0 : fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_SERIALIZABLE:
                         valueMetaInterface = new ValueMetaSerializable();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
-
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_BINARY:
                         valueMetaInterface = new ValueMetaBinary();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
-
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_TIMESTAMP:
                         valueMetaInterface = new ValueMetaTimestamp();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
-
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
                     case ValueMetaInterface.TYPE_INET:
                         valueMetaInterface = new ValueMetaInternetAddress();
-                        valueMetaInterface.setName(fieldsInfoVO.getName());
-
+                        valueMetaInterface.setName(name);
                         valueMetaInterface.setLength(fieldsInfoVO.getLength());
                         valueMetaInterface.setPrecision(fieldsInfoVO.getPrecision());
                         break;
